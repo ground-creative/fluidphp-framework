@@ -1,0 +1,6 @@
+ {
+	"require": 
+	{
+		"phptoolcase/phptoolcase": "dev-beta"
+	}
+}
