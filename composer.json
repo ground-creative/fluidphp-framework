@@ -1,6 +1,6 @@
  {
 	"name": "fluidphp/framework",	
-	"type": "library",
+	"type": "framework",
 	"description": "A php framework",
 	"keywords": ["php framework"],
 	"homepage": "http://phptoolcase.com",
@@ -16,6 +16,6 @@
 	"require": 
 	{
 		"php": ">=5.3.0" ,
-		"phptoolcase/phptoolcase": "dev-beta"
+		"phptoolcase/phptoolcase": "0.9.*"
 	}
 }
