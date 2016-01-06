@@ -13,8 +13,12 @@
 			"role": "Developer"
 		}
 	] ,
+	"repositories":
+	{
+		"packagist": { "url": "https://packagist.org", "type": "composer" }
+	} ,
 	"require": 
 	{
-		"phptoolcase/phptoolcase": "dev-master"
+		"phptoolcase/phptoolcase": "dev-beta"
 	}
 }
