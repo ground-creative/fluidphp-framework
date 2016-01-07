@@ -283,8 +283,14 @@
 			ptc_add_file( ptc_array_get( static::$_config , 'app.files' ) );
 			ptc_add_dir( ptc_array_get( static::$_config , 'app.directories' ) );
 			ptc_add_dir( ptc_array_get( static::$_config , 'app.namespaces' ) );
-			HandyMan::addSeparators( ptc_array_get( static::$_config , 'app.separators' ) );
-			HandyMan::addConventions( ptc_array_get( static::$_config , 'app.conventions' ) );
+			if ( $sep = ptc_array_get( static::$_config , 'app.separators' ) )
+			{
+				HandyMan::addSeparators( $sep );
+			}
+			if ( $conv = ptc_array_get( static::$_config , 'app.conventions' ) )
+			{
+				HandyMan::addConventions( $conv );
+			}
 			/* database */
 			static::option( 'db' , Module::merge( ptc_path( 'root' ) . '/app/config/db.php' ) );
 			if ( $db = ptc_array_get( static::$_config , 'db' ) )
