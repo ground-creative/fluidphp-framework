@@ -71,7 +71,9 @@
 						if ( is_array( $v ) && array_key_exists( $k , $options ) )
 						{
 							$val = array_merge( $options[ $k ] , $v );
-							$options[ $k ] = array_unique( $val );
+							//$options[ $k ] = array_unique( $val );
+							$options[ $k ] = array_map( 'unserialize' , 
+								array_unique( array_map( 'serialize' , $val ) ) );
 						}
 						else { $options[ $k ] = $v; }
 					}
