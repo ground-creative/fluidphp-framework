@@ -19,7 +19,7 @@
 			{
 				$path = str_replace( '//' , '/' , $path );
 				$path = str_replace( array( '/' , '\\' ) , DIRECTORY_SEPARATOR , $path );
-				$path = \system\Core\Module\StreamWrapper::intercept( $path , 'realpath' );
+				$path = \fluidphp\framework\Module\StreamWrapper::intercept( $path , 'realpath' );
 			} );
 			StreamWrapper::wrap( );
 		}
