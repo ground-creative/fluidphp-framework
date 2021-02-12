@@ -349,12 +349,15 @@
 					foreach ( $scanned_directory as $file )
 					{
 						$option_name = str_replace( '.php' , '' , $file );
-						$options = require( ptc_path( 'root' ) . '/modules/' . $k . '/config/' . $file );
-						if ( ptc_array_get( $options , '_load' ) )
+						if ( !static::option( $option_name ) )
 						{
-							$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+							$options = require( ptc_path( 'root' ) . '/modules/' . $k . '/config/' . $file );
+							if ( ptc_array_get( $options , '_load' ) )
+							{
+								$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+							}
+							static::option( $option_name , $options );
 						}
-						static::option( $option_name , $options );
 					}
 				}
 			}
