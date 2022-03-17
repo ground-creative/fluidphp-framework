@@ -16,6 +16,6 @@
 	"require": 
 	{
 		"php": ">=5.4.0" ,
-		"phptoolcase/phptoolcase": "0.9.*"
+		"phptoolcase/phptoolcase": ">=1.0.0*"
 	}
 }
