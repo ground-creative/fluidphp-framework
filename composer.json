@@ -4,12 +4,12 @@
 	"description": "A php framework",
 	"keywords": ["php framework"],
 	"homepage": "http://phptoolcase.com",
-	"license": "GPL V2",
+	"license": "GPL-3.0-or-later" ,
 	"authors": 
 	[
 		{
 			"name": "Carlo Pietrobattista",
-			"email": "carlo@salapc.com",
+			"email": "carlo@ground-creative.com",
 			"role": "Developer"
 		}
 	] ,
