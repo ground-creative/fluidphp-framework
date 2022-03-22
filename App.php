@@ -230,7 +230,7 @@
 				}
 			}
 			static::option( 'debug' , $debug );
-			require_once( ptc_path( 'root' ) . '/vendor/phptoolcase/phptoolcase/PtcDebug.php' );
+			require_once( ptc_path( 'root' ) . '/vendor/phptoolcase/phptoolcase/libPtcDebug.php' );
 			if ( !is_null( ptc_array_get( static::$_config , 'debug.replace_error_handler' , null ) ) )
 			{
 				$die_on_error = ( ptc_array_get( static::$_config , 'debug.die_on_error' ) ) ? true : false;
