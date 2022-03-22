@@ -54,9 +54,9 @@
 	# add,commit and push all changes, params: commit message (opional, the last commit will be used if not set)
 	push-all = "!f() {\
 		if [ $1 ]; then\
-			git c-all $1;\
+			git com-all $1;\
 		else\
-			git c-all;\
+			git com-all;\
 		fi;\
 		echo \"\\033[33m- Pushing commit\\033[0m\";\
 		echo \"\\033[36m-- Command: git push origin\\033[0m\";\
