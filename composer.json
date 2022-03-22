@@ -1,5 +1,5 @@
  {
-	"name": "ground-creative/fluidphp-core",	
+	"name": "fluidphp/framework",	
 	"type": "framework",
 	"description": "Core files for fluidphp framework",
 	  "keywords": [
@@ -27,6 +27,6 @@
 	"require": 
 	{
 		"php": ">=5.4.0" ,
-		"ground-creative/phptoolcase": "*"
+		"phptoolcase/phptoolcase": "*"
 	}
 }
