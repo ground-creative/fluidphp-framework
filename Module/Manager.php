@@ -9,7 +9,7 @@
 	namespace fluidphp\framework\Module;
 	
 	use fluidphp\framework\App as App;
-	use PtcEvent as Event;
+	use phptoolcase\Event as Event;
 
 	class Manager
 	{
