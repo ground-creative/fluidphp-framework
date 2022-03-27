@@ -8,11 +8,11 @@
 	
 	namespace fluidphp\framework;
 	
-	use PtcHandyMan as HandyMan;
-	use PtcDebug as Debug;
-	use PtcRouter as Router;
-	use PtcDb as DB;
-	use PtcEvent as Event;
+	use phptoolcase\HandyMan as HandyMan;
+	use phptoolcase\Debug as Debug;
+	use phptoolcase\Router as Router;
+	use phptoolcase\Db as DB;
+	use phptoolcase\Event as Event;
 	use fluidphp\framework\Module\Manager as Module;
 
 	class App
@@ -230,7 +230,7 @@
 				}
 			}
 			static::option( 'debug' , $debug );
-			require_once( ptc_path( 'root' ) . '/vendor/phptoolcase/phptoolcase/lib/PtcDebug.php' );
+			require_once( ptc_path( 'root' ) . '/vendor/phptoolcase/phptoolcase/lib/Debug.php' );
 			if ( !is_null( ptc_array_get( static::$_config , 'debug.replace_error_handler' , null ) ) )
 			{
 				$die_on_error = ( ptc_array_get( static::$_config , 'debug.die_on_error' ) ) ? true : false;
