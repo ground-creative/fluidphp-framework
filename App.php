@@ -33,7 +33,7 @@
 		public function __construct( )
 		{
 			$class = get_called_class( );
-			$event = Event::getEvent( 'app' );
+			$event = Event::get( 'app' );
 			if ( is_array( $event ) && ptc_array_get( $event , 'start' , false ) )
 			{ 
 				ptc_fire( 'app.start' , array( &$class::$_config , &$this ) ); 
@@ -50,11 +50,11 @@
 			$this->_modules = Module::all( );
 			$uri = Router::getUri( );
 			$location = Module::location( );
-			$raw = str_replace( \App::option( 'modules.env' ) , '' , $uri[ 'path' ] );
+			$raw = str_replace( static::option( 'modules.env' ) , '' , $uri[ 'path' ] );
 			if ( $location && 0 === strpos( $raw , $location ) )
 			{
 				$raw = substr( $raw , strlen( $location ) );
-				$uri[ 'path' ] = \App::option( 'modules.env' ) . $raw;
+				$uri[ 'path' ] = static::option( 'modules.env' ) . $raw;
 			}
 			$response = Router::run( $check_config , $uri ); 
 			$class = get_called_class( );
@@ -135,6 +135,40 @@
 		*/
 		public static function configure( )
 		{
+			if ( 'cli' === PHP_SAPI )	// env variables
+			{	
+				/* cli env vars */
+				static::option( 'cli' , require_once( ptc_path( 'root' ) . '/app/config/cli.php' ) );
+				if ( $env_file_path = static::option( 'cli.env_path' ))
+				{
+					if ( !file_exists( $env_file_path ) )
+					{
+						throw new \Exception( 'File ' . $env_file_path . ' not found!' );
+					}
+					else
+					{
+						$env_path = file_get_contents( static::option( 'cli.env_path' ) );
+						$env_path = str_replace( '_DOCUMENT_ROOT_' , ptc_path( 'root' ) , $env_path );
+						if ( !file_exists( $env_path ) )
+						{
+							throw new \Exception( 'File .env ' . $env_path . ' not found!' );
+						}
+						else
+						{
+							$env_data = file_get_contents( $env_path );
+							foreach( preg_split( "/((\r?\n)|(\r\n?))/" , $env_data ) as $line )
+							{
+								if ( false !== strpos( $line , 'SetEnv' ) )
+								{
+									$l =  preg_replace( '/\s+/' , ' ' , $line );
+									$env_var = explode( ' ' , $l );
+									putenv( $env_var[ 1 ] . "=" . $env_var[ 2 ] );
+								}
+							} 
+						}
+					}
+				}
+			}
 			static::_registerModules( );
 			static::_setPhpInit( );
 			static::_setDebug( );

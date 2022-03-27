@@ -298,8 +298,9 @@
 					{
 						if ( $debug )
 						{
-							ptc_log( [ $file , $path ] , 'StreamWrapper intercepted module file!' , 
-																'StreamWrapper Config' );
+							ptc_log( [ $file , $path ] , 
+								'StreamWrapper intercepted module file!' , 
+													'StreamWrapper Config' );
 						}
 						$path = $file;
 						break; // load the first file found

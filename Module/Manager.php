@@ -52,11 +52,20 @@
 		
 		public static function merge( $file )
 		{
+			$option_name = @end( explode( '/' , str_replace( '.php' , '' , $file ) ) );
 			if ( empty( static::$_modules ) )
 			{
-				return require_once( $file );
+				$options = require_once( $file );
+				if ( 'modules' === $option_name && 
+					$callback = ptc_array_get( $options , '_load' ) )
+				{
+					\phptoolcase\HandyMan::addFile( 
+						[ $callback[ 'class' ] => $callback[ 'file' ] ] );
+					$options = call_user_func( [ $callback[ 'class' ] , 
+									$callback[ 'method' ] ] , $options );
+				}
+				return $options;
 			}
-			$option_name = @end( explode( '/' , str_replace( '.php' , '' , $file ) ) );
 			$options = ( file_exists( $file ) ) ? require_once( $file ) : array( );
 			foreach ( static::$_modules as $module )
 			{
