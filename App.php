@@ -133,6 +133,14 @@
 		/**
 		*
 		*/
+		public static function reset_storage( )
+		{
+			static::$_storage = array( );
+		}
+
+		/**
+		*
+		*/
 		public static function configure( )
 		{
 			if ( 'cli' === PHP_SAPI )	// env variables
