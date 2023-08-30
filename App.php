@@ -135,39 +135,21 @@
 		*/
 		public static function configure( )
 		{
-			if ( 'cli' === PHP_SAPI )	// env variables
-			{	
-				/* cli env vars */
-				static::option( 'cli' , require_once( ptc_path( 'root' ) . '/app/config/cli.php' ) );
-				if ( $env_file_path = static::option( 'cli.env_path' ))
+			$env_file_path = ptc_path( 'root' ) . '/.env';
+			if (file_exists($env_file_path))
+			{
+				$env_data = file_get_contents($env_file_path);
+				foreach( preg_split( "/((\r?\n)|(\r\n?))/" , $env_data ) as $line )
 				{
-					if ( !file_exists( $env_file_path ) )
+					if ( false !== strpos( $line , 'SetEnv' ) )
 					{
-						throw new \Exception( 'File ' . $env_file_path . ' not found!' );
+						$l =  preg_replace( '/\s+/' , ' ' , $line );
+						$env_var = explode( ' ' , $l );
+						putenv( $env_var[ 1 ] . "=" . $env_var[ 2 ] );
+						$_ENV[$env_var[1]] = $env_var[2];
+						$_SERVER[$env_var[1]] = $env_var[2];
 					}
-					else
-					{
-						$env_path = file_get_contents( static::option( 'cli.env_path' ) );
-						$env_path = str_replace( '_DOCUMENT_ROOT_' , ptc_path( 'root' ) , $env_path );
-						if ( !file_exists( $env_path ) )
-						{
-							throw new \Exception( 'File .env ' . $env_path . ' not found!' );
-						}
-						else
-						{
-							$env_data = file_get_contents( $env_path );
-							foreach( preg_split( "/((\r?\n)|(\r\n?))/" , $env_data ) as $line )
-							{
-								if ( false !== strpos( $line , 'SetEnv' ) )
-								{
-									$l =  preg_replace( '/\s+/' , ' ' , $line );
-									$env_var = explode( ' ' , $l );
-									putenv( $env_var[ 1 ] . "=" . $env_var[ 2 ] );
-								}
-							} 
-						}
-					}
-				}
+				} 
 			}
 			static::_registerModules( );
 			static::_setPhpInit( );
@@ -347,8 +329,8 @@
 		protected static function _setCustomConfigFiles( )
 		{	
 			/* custom config files */
-			$files = array( '..' , '.' , 'app.php' , 'db.php' , 'debug.php' , 'init.php' , 'modules.php' ,
-											'paths.php' , 'auth.php' , 'debug_ajax.php' );
+			$files = ['..' , '.' , 'app.php' , 'db.php' , 'debug.php' , 'init.php' , 
+						'modules.php' ,'paths.php' , 'auth.php' , 'debug_ajax.php'];
 			$scanned_directory = array_diff( scandir( ptc_path( 'root' ) . '/app/config' ) , $files );
 			if ( !empty( $scanned_directory ) )
 			{
