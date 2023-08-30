@@ -144,8 +144,8 @@
 					if ( false !== strpos( $line , 'SetEnv' ) )
 					{
 						$l =  preg_replace( '/\s+/' , ' ' , $line );
-						$env_var = explode( ' ' , $l );
-						putenv( $env_var[ 1 ] . "=" . $env_var[ 2 ] );
+						$env_var = explode(' ', $l, 3);
+						putenv($env_var[1] . "=" . $env_var[2]);
 						$_ENV[$env_var[1]] = $env_var[2];
 						$_SERVER[$env_var[1]] = $env_var[2];
 					}
