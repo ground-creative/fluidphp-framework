@@ -135,22 +135,7 @@
 		*/
 		public static function configure( )
 		{
-			$env_file_path = ptc_path( 'root' ) . '/.env';
-			if (file_exists($env_file_path))
-			{
-				$env_data = file_get_contents($env_file_path);
-				foreach( preg_split( "/((\r?\n)|(\r\n?))/" , $env_data ) as $line )
-				{
-					if ( false !== strpos( $line , 'SetEnv' ) )
-					{
-						$l =  preg_replace( '/\s+/' , ' ' , $line );
-						$env_var = explode(' ', $l, 3);
-						putenv($env_var[1] . "=" . $env_var[2]);
-						$_ENV[$env_var[1]] = $env_var[2];
-						$_SERVER[$env_var[1]] = $env_var[2];
-					}
-				} 
-			}
+			static::_loadEnvVars();
 			static::_registerModules( );
 			static::_setPhpInit( );
 			static::_setDebug( );
@@ -375,6 +360,77 @@
 							static::option( $option_name , $options );
 						}
 					}
+				}
+			}
+		}
+		/**
+		* Load environment variables
+		*/
+		protected static function _loadEnvVars()
+		{
+			$env_file_path = ptc_path( 'root' ) . '/.env';
+			if (file_exists($env_file_path))
+			{
+				$env_data = file_get_contents($env_file_path);
+				$data = [ ];
+				foreach( preg_split( "/((\r?\n)|(\r\n?))/" , $env_data ) as $line )
+				{
+					if ( false !== strpos( $line , 'SetEnv' ) )	// old variables
+					{
+						$l = preg_replace( '/\s+/' , ' ' , $line );
+						$env_var = explode(' ', $l, 3);
+						putenv($env_var[1] . "=" . $env_var[2]);
+						$_ENV[$env_var[1]] = $env_var[2];
+						$_SERVER[$env_var[1]] = $env_var[2];
+					}
+					else
+					{
+						$env_var = explode('=', $line, 2);
+						$env_var[0] = trim($env_var[0]);
+						$env_var[1] = trim($env_var[1]);
+						if (false === strpos($env_var[1], "'") && false === strpos($env_var[1], '"'))
+						{
+							if (is_numeric($env_var[1]))
+							{
+								$env_var[1] = (float)$env_var[1];
+							}
+							else
+							{
+								switch($env_var[1])
+								{
+									case 'true':
+										$env_var[1] = true;
+									break;
+									case 'false':
+										$env_var[1] = false;
+									break;
+									case 'null':
+										$env_var[1] = null;
+									break;
+									default:
+										$env_var[1] = $env_var[1];
+								}
+							}
+						}
+						else
+						{
+							$env_var[1] = preg_replace('~^[\'"]?(.*?)[\'"]?$~', '$1', $env_var[1]);
+						}
+					}
+					$data[$env_var[0]] = $env_var; 
+				} 
+				foreach ($data as $env_var)
+				{
+					if (preg_match_all('/\${(.*?)}/', $env_var[1], $output))
+					{
+						foreach ($output[1] as $key => $value)
+						{
+							$env_var[1] = str_replace($output[0][$key], $data[$value][1], $env_var[1]);
+						}
+					}
+					putenv($env_var[0] . "=" . $env_var[1]);
+					$_ENV[$env_var[0]] = $env_var[1];
+					$_SERVER[$env_var[0]] = $env_var[1];	
 				}
 			}
 		}
