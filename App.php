@@ -321,13 +321,17 @@
 			{
 				foreach ( $scanned_directory as $file )
 				{
-					$option_name = str_replace( '.php' , '' , $file );
-					$options = Module::merge( ptc_path( 'root' ) . '/app/config/' . $file );
-					if ( ptc_array_get( $options , '_load' ) )
+					$file_parts = pathinfo($file);
+					if ($file_parts['extension'] == 'php')
 					{
-						$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+						$option_name = str_replace( '.php' , '' , $file );
+						$options = Module::merge( ptc_path( 'root' ) . '/app/config/' . $file );
+						if ( ptc_array_get( $options , '_load' ) )
+						{
+							$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+						}
+						static::option( $option_name , $options );
 					}
-					static::option( $option_name , $options );
 				}
 			}
 			static::_loadModulesConfig( );
@@ -349,15 +353,19 @@
 				{
 					foreach ( $scanned_directory as $file )
 					{
-						$option_name = str_replace( '.php' , '' , $file );
-						if ( !static::option( $option_name ) )
+						$file_parts = pathinfo($file);
+						if ($file_parts['extension'] == 'php')
 						{
-							$options = require( ptc_path( 'root' ) . '/modules/' . $k . '/config/' . $file );
-							if ( ptc_array_get( $options , '_load' ) )
+							$option_name = str_replace( '.php' , '' , $file );
+							if ( !static::option( $option_name ) )
 							{
-								$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+								$options = require( ptc_path( 'root' ) . '/modules/' . $k . '/config/' . $file );
+								if ( ptc_array_get( $options , '_load' ) )
+								{
+									$options = call_user_func( ptc_array_get( $options , '_load' ) , $options );
+								}
+								static::option( $option_name , $options );
 							}
-							static::option( $option_name , $options );
 						}
 					}
 				}
